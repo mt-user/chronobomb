@@ -1,35 +1,56 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from "@angular/core";
+const DEFAULT_MINUTES = 9;
+const DEFAULT_SECONDS = 59;
 
 @Component({
-  selector: 'app-clock',
-  templateUrl: './clock.component.html',
-  styleUrls: ['./clock.component.scss']
+  selector: "app-clock",
+  templateUrl: "./clock.component.html",
+  styleUrls: ["./clock.component.scss"]
 })
-export class ClockComponent implements OnInit {
-  minutos: number;
-  segundos: number;
-
-  constructor() { 
+export class ClockComponent {
+  constructor() {
     this.resetTimer();
-    setInterval(() => this.tick(), 1000);
+    setInterval(() => this.actions(), 1000);
   }
+  private minutos: string;
+  private segundos: string;
 
-  resetTimer(): void {
-    this.minutos = 9;
-    this.segundos = 59;
-  }
+  private min: number;
+  private sec: number;
 
-  private tick(): void {
-    if (--this.segundos < 0){
-      this.segundos = 59;
-      if (--this.minutos < 0){
-        this.minutos = 24;
-        this.segundos = 59;
+  private actions = () => {
+    const pipe = (...fns) => fns.map(f => f());
+    pipe(
+      this.decrement,
+      this.asignTimeToView
+    );
+  };
+
+  private decrement = () => {
+    if (--this.sec < 0) {
+      this.sec = DEFAULT_SECONDS;
+      if (--this.min < 0) {
+        this.min = DEFAULT_MINUTES;
+        this.sec = DEFAULT_SECONDS;
       }
     }
+  };
+
+  private asignTimeToView = () => {
+    this.minutos = "" + this.min;
+    this.segundos = "" + this.sec;
+    if (this.min < 10) {
+      this.minutos = "0" + this.min;
+    }
+    if (this.sec < 10) {
+      this.segundos = "0" + this.sec;
+    }
+  };
+
+  private resetTimer(): void {
+    this.min = DEFAULT_MINUTES;
+    this.sec = DEFAULT_SECONDS;
   }
 
-  ngOnInit() {
-  }
-
+  public getTime = () => `${this.minutos} : ${this.segundos}`;
 }
