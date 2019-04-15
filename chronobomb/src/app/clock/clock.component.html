@@ -1,3 +1,11 @@
-<h1>
-  {{ getTime() }}
-</h1>
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <div class="row justify-content-center">
+        <h1 *ngIf="minutos && segundos">
+          {{ getTime() }}
+        </h1>
+      </div>
+    </div>
+  </div>
+</div>

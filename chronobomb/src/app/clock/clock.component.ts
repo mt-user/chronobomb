@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 const DEFAULT_MINUTES = 9;
 const DEFAULT_SECONDS = 59;
 
@@ -7,10 +7,13 @@ const DEFAULT_SECONDS = 59;
   templateUrl: "./clock.component.html",
   styleUrls: ["./clock.component.scss"]
 })
-export class ClockComponent {
+export class ClockComponent implements OnInit {
   constructor() {
     this.resetTimer();
     setInterval(() => this.actions(), 1000);
+  }
+  ngOnInit(): void {
+    this.resetTimer();
   }
   private minutos: string;
   private segundos: string;
@@ -37,13 +40,13 @@ export class ClockComponent {
   };
 
   private asignTimeToView = () => {
-    this.minutos = "" + this.min;
-    this.segundos = "" + this.sec;
+    this.minutos = `${this.min}`;
+    this.segundos = `${this.sec}`;
     if (this.min < 10) {
-      this.minutos = "0" + this.min;
+      this.minutos = `0${this.min}`;
     }
     if (this.sec < 10) {
-      this.segundos = "0" + this.sec;
+      this.segundos = `0${this.sec}`;
     }
   };
 
