@@ -21,6 +21,7 @@ export class ClockComponent implements OnInit {
   private segundos: string;
   private gifVisibility: boolean;
   private chrono;
+  private attempts: number = 0;
 
   private min: number;
   private sec: number;
@@ -31,7 +32,8 @@ export class ClockComponent implements OnInit {
     const pipe = (...fns) => fns.map(f => f());
     pipe(
       this.decrement,
-      this.asignTimeToView
+      this.asignTimeToView,
+      this.saveTimeLocal
     );
   };
 
@@ -55,9 +57,16 @@ export class ClockComponent implements OnInit {
     }
   };
 
+  private saveTimeLocal = () => {
+    if (this.gifVisibility != true){
+      localStorage.setItem("segundos", JSON.stringify(this.sec));
+      localStorage.setItem("minutos", JSON.stringify(this.min));
+    }
+  };
+
   private resetTimer = () => {
-    this.min = DEFAULT_MINUTES;
-    this.sec = DEFAULT_SECONDS;
+    this.min = localStorage.getItem("minutos")? JSON.parse(localStorage.getItem("minutos")) : DEFAULT_MINUTES;
+    this.sec = localStorage.getItem("segundos")? JSON.parse(localStorage.getItem("segundos")) : DEFAULT_SECONDS;
   };
 
   private explode = () => {
@@ -65,6 +74,8 @@ export class ClockComponent implements OnInit {
       this.min = 0;
       this.sec = 0;
       this.gifVisibility = true;
+      localStorage.removeItem("minutos");
+      localStorage.removeItem("segundos");
   };
 
   public getTime = () => `${this.minutos}:${this.segundos}`;
@@ -77,6 +88,13 @@ export class ClockComponent implements OnInit {
       case "ok":
         if (this.screen.code == "41253"){
           clearInterval(this.chrono);
+          localStorage.removeItem("minutos");
+          localStorage.removeItem("segundos");
+        } else if (this.attempts + 1 == 3) {
+          this.explode();
+        } else if (this.min >= 1){
+          this.attempts++;
+          this.min--;
         } else {
           this.explode();
         }

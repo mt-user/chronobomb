@@ -19,12 +19,16 @@
 }
 .keyboard-container {
     button {
-        width: 42px;
-        height: 42px;
-        margin: 2px;
+        width: 64px;
+        height: 64px;
+        margin: 4px;
     }
     p {
-        margin-bottom: 0.5em;
+        margin-bottom: 0.1em;
+        .btn {
+            font-size: 1.5rem;
+            border-radius: .40rem;
+        }
     }
 }
 .explosion-img{
