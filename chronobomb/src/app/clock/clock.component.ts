@@ -17,16 +17,16 @@ export class ClockComponent implements OnInit {
   ngOnInit(): void {
     this.resetTimer();
   }
-  private minutos: string;
-  private segundos: string;
-  private gifVisibility: boolean;
+  public minutos: string;
+  public segundos: string;
+  public gifVisibility: boolean;
   private chrono;
   private attempts: number = 0;
 
   private min: number;
   private sec: number;
 
-  private screen = { code: "", isCode: false };
+  public screen = { code: "", isCode: false };
 
   private actions = () => {
     const pipe = (...fns) => fns.map(f => f());
